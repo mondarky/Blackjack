@@ -35,3 +35,14 @@ button.hit-button{
     padding-bottom: 5px;
     margin-top: 5px;
 }
+button.stay-button{
+    color: #016f32;
+    width:  150px;
+    background-color: goldenrod;
+    border: none;
+    border-radius:2px;
+    font-weight: bold;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    margin-top: 5px;
+}

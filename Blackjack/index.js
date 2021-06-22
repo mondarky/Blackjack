@@ -15,6 +15,7 @@ let buttonEl = document.getElementById("button-el");
 let playerEl = document.getElementById("player-el");
 playerEl.textContent = player.name + " : " + player.chips;
 function startGame(){
+    displayPlayButton()
     isAlive = true;
     backJack = false;
     cards = [];
@@ -36,23 +37,21 @@ function renderGame(){
         message = "Hit?";
         isAlive = true;
     }else if (sumCard === 21){
-        message = "Blackjack!";
-        backJack = true;
-        isAlive = false;
+        cardBackJack();
     }else {
-        isAlive = false;
-        message = "Bust!";
+        cardBust()
     }
     messageEl.textContent = message;
     
 }
 function hitCard(){
-    if(isAlive === true && backJack === false){
-        cards.push(getRandomCard());
-        renderGame();
-    }
-    
+    cards.push(getRandomCard());
+    renderGame();
 }
+function stayCard(){
+
+}
+
 function getRandomCard(){
     let randomNumber = Math.floor(Math.random()*13) + 1
     if(randomNumber > 10){
@@ -63,5 +62,31 @@ function getRandomCard(){
         return randomNumber;
     }
     
+}
+function cardBackJack(){
+    message = "Blackjack!";
+    backJack = true;
+    isAlive = false;
+    displayNewGameButton()
+}
+function cardBust(){
+    message = "Bust!";
+    isAlive = false;
+    displayNewGameButton()
+}
+function displayStartButton(){
+    document.getElementById('button-el').innerHTML = `
+    <button class='start-button' onclick="startGame()" >START GAME</button>
+    `;
+}
+function displayNewGameButton(){
+    document.getElementById('button-el').innerHTML = `
+    <button class='start-button' onclick="startGame()" >NEW GAME</button>
+    `;
+}
+function displayPlayButton(){
+    document.getElementById('button-el').innerHTML = `
+    <button class='hit-button' onclick="hitCard()" >HIT</button>
+    <button class='stay-button' onclick="stayCard()" >STAY</button>`;
 }
 
