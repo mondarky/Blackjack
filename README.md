@@ -1,5 +1,5 @@
 # Blackjack
-A project build following the tutorial video from freecodecamp.org by Per Harald Borgen  
+A project base on the tutorial video from freecodecamp.org by Per Harald Borgen  
 
 # Credit
 **Youtube video link**  
