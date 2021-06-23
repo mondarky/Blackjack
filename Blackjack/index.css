@@ -46,3 +46,16 @@ button.stay-button{
     padding-bottom: 5px;
     margin-top: 5px;
 }
+.game .card{
+    width: 50px;
+    height: 80px;
+    padding: 10px;
+    border: solid 1px;
+    border-color: goldenrod;
+    display: inline-block;
+    border-radius: 10px;
+    font-size: 10pt;
+    text-align: center;
+    margin: 3px;
+    border:solid 3px;
+}

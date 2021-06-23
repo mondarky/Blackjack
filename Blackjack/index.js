@@ -1,4 +1,4 @@
-let playerCards = [];
+let playerCards = [],dealerCards = [];
 let backJack = false;
 let isAlive = false;
 let message = "";
@@ -21,6 +21,7 @@ playerEl.textContent = player.name + " : " + player.chips;
 function startGame(){
     displayPlayButton();
     createDeck();
+    clearRenderCard();
     isAlive = true;
     backJack = false;
     playerCards = [];
@@ -32,8 +33,10 @@ function renderGame(){
     let sumCard = 0;
     let stringCard = "";
     for(c in playerCards){
+        renderCardPlayer(c,playerCards[c]);
         sumCard += playerCards[c].Weight;
         stringCard += String(playerCards[c].Value) + " "
+        
     }
     sumEl.textContent = "Sum: " + String(sumCard);
     cardEl.textContent = "playerCards: " + stringCard;
@@ -42,6 +45,30 @@ function renderGame(){
     messageEl.textContent = message;
     
 }
+function renderCardPlayer(c,playerCards){
+    let id = "player" +String(c);
+    let card = document.getElementById(id);
+    let suit ='';
+    if (playerCards.Suit == 'Hearts')
+        icon='&hearts;';
+    else if (playerCards.Suit == 'Spades')
+        icon = '&spades;';
+    else if (playerCards.Suit == 'Diamonds')
+        icon = '&diams;';
+    else
+        icon = '&clubs;';
+    
+    card.innerHTML = playerCards.Value + '</br>' + icon;
+
+}
+function clearRenderCard(){
+    for(i=0 ; i<5; i++){
+        let id = "player" +String(i);
+        let card = document.getElementById(id);
+        card.innerHTML = ' ';
+
+    }
+} 
 function gameCaculation(sum){
     if (sum < 21){
         message = "Hit?";
@@ -77,6 +104,7 @@ function cardBust(){
 }
 
 function createDeck(){
+    // 4 suits, A - K
     deck = new Array();
     for(var x = 0; x < suits.length; x++){
         for (var i = 0 ; i < values.length; i++){
