@@ -50,7 +50,6 @@ button.stay-button{
     width: 50px;
     height: 80px;
     padding: 10px;
-    border: solid 1px;
     border-color: goldenrod;
     display: inline-block;
     border-radius: 10px;
@@ -58,4 +57,12 @@ button.stay-button{
     text-align: center;
     margin: 3px;
     border:solid 3px;
+}
+.game .card_area{
+    margin: auto;
+    height: 180px;
+    width: 500px;
+    padding: 10px;
+    border:solid 3px;
+    text-align: center;
 }

@@ -1,4 +1,6 @@
 let playerCards = [],dealerCards = [];
+let sumCardPlayer = 0,sumCardDealer = 0;
+let stringCardPlayer = "",stringCardDealer = "";
 let backJack = false;
 let isAlive = false;
 let message = "";
@@ -12,8 +14,10 @@ let deck = new Array();
 
 
 let messageEl = document.getElementById("message-el");
-let sumEl = document.getElementById("sum-el");
-let cardEl = document.getElementById("card-el");
+let sumPlayerEl = document.getElementById("sumPlayer-el");
+let cardPlayerEl = document.getElementById("cardPlayer-el");
+let sumDealerEl = document.getElementById("sumDealer-el");
+let cardDealerEl = document.getElementById("cardDealer-el");
 let buttonEl = document.getElementById("button-el");
 let playerEl = document.getElementById("player-el");
 playerEl.textContent = player.name + " : " + player.chips;
@@ -25,28 +29,44 @@ function startGame(){
     isAlive = true;
     backJack = false;
     playerCards = [];
+    dealerCards = []
     playerCards.push(drawCard());
+    dealerCards.push(drawCard());
     playerCards.push(drawCard());
+    dealerCards.push(drawCard());
     renderGame();
 }
 function renderGame(){
-    let sumCard = 0;
-    let stringCard = "";
+    sumCardPlayer = 0;
+    sumCardDealer = 0;
+    stringCardPlayer = "";
+    stringCardDealer = "";
     for(c in playerCards){
-        renderCardPlayer(c,playerCards[c]);
-        sumCard += playerCards[c].Weight;
-        stringCard += String(playerCards[c].Value) + " "
+        renderCardPlayer(c,playerCards[c],"player");
+        sumCardPlayer += playerCards[c].Weight;
+        stringCardPlayer += String(playerCards[c].Value) + " ";
         
     }
-    sumEl.textContent = "Sum: " + String(sumCard);
-    cardEl.textContent = "playerCards: " + stringCard;
-    gameCaculation(sumCard);
-    
+    for(c in dealerCards){
+        renderCardPlayer(c,dealerCards[c],"dealer");
+        sumCardDealer += dealerCards[c].Weight;
+        stringCardDealer += String(dealerCards[c].Value) + " ";
+    }
+    sumPlayerEl.textContent = "Sum: " + String(sumCardPlayer);
+    cardPlayerEl.textContent = "playerCards: " + stringCardPlayer;
+    sumDealerEl.textContent = "Sum: " + String(sumCardDealer);
+    cardDealerEl.textContent = "playerCards: " + stringCardDealer;
+    gameCaculation(sumCardPlayer);
+    if(playerCards.length == 5){
+        finalCalcutation()
+        playerEl.textContent = player.name + " : " + player.chips;
+        displayNewGameButton();  
+    }
     messageEl.textContent = message;
     
 }
-function renderCardPlayer(c,playerCards){
-    let id = "player" +String(c);
+function renderCardPlayer(c,playerCards,player){
+    let id = String(player) +String(c);
     let card = document.getElementById(id);
     let suit ='';
     if (playerCards.Suit == 'Hearts')
@@ -64,8 +84,11 @@ function renderCardPlayer(c,playerCards){
 function clearRenderCard(){
     for(i=0 ; i<5; i++){
         let id = "player" +String(i);
+        let idDealer = "dealer" +String(i);
         let card = document.getElementById(id);
+        let dealer = document.getElementById(idDealer);
         card.innerHTML = ' ';
+        dealer.innerHTML = ' ';
 
     }
 } 
@@ -84,7 +107,44 @@ function hitCard(){
     renderGame();
 }
 function stayCard(){
-    displayNewGameButton();
+    finalCalcutation()
+    playerEl.textContent = player.name + " : " + player.chips;
+    displayNewGameButton();    
+}
+function finalCalcutation(){
+    if(sumCardDealer <= 16){
+        sumCardDealer = 0;
+        stringCardDealer = "";
+        dealerCards.push(drawCard());
+        for(c in dealerCards){
+            renderCardPlayer(c,dealerCards[c],"dealer");
+            sumCardDealer += dealerCards[c].Weight;
+            stringCardDealer += String(dealerCards[c].Value) + " ";
+        }
+        sumDealerEl.textContent = "Sum: " + String(sumCardDealer);
+        cardDealerEl.textContent = "playerCards: " + stringCardDealer;
+        finalCalcutation();
+    }else if(sumCardDealer > 21){
+        messageEl.textContent = "Dealer Bust! You win!";
+        player.chips +=10;
+    }
+    else{
+        if(sumCardDealer < sumCardPlayer){
+            if(backJack){
+                messageEl.textContent = "Blackjack! You win!";
+                player.chips +=30;
+            }else{
+                messageEl.textContent = "You win!";
+                player.chips +=10;
+            }
+            
+        }else if(sumCardDealer > sumCardPlayer){
+            messageEl.textContent = "You lose!";
+            player.chips -=10;
+        }else{
+            messageEl.textContent = "Draw!";
+        }
+    }
 }
 
 function drawCard(){
@@ -92,14 +152,17 @@ function drawCard(){
     return draw;
 }
 function cardBackJack(){
-    message = "Blackjack!";
     backJack = true;
     isAlive = false;
+    finalCalcutation()
+    playerEl.textContent = player.name + " : " + player.chips;
     displayNewGameButton()
 }
 function cardBust(){
-    message = "Bust!";
+    message = "Bust! You lose!";
     isAlive = false;
+    player.chips -=10
+    playerEl.textContent = player.name + " : " + player.chips;
     displayNewGameButton()
 }
 
